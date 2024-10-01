@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Upload</title>
+        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: #333;
+        }
+
+        /* Spinner Preloader CSS */
+        #preloader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Light background with opacity */
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preloader img {
+            width: 100px; /* Adjust size as needed */
+            height: 100px;
+        }
+    
+          /* Sticky header */
+        .header {
+            background-color: skyblue;
+            color: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .hamburger {
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Menu Styles */
+        .menu {
+            position: fixed;
+            right: -100%;
+            top: 0;
+            width: 50%;
+            height: 100vh;
+            background-color: white;
+            border-left: 1px solid #ccc;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 30px;
+        }
+
+        .menu.open {
+            right: 0;
+        }
+
+        .menu img {
+            width: 80%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+            border-bottom: 1px solid #ccc;
+            width: 90%;
+            text-align: center;
+        }
+
+        .menu a:last-child {
+            border-bottom: none;
+        }
+
+        .menu a:hover {
+            background-color: skyblue;
+            color: white;
+        }
+
+        .menu .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Blur background when menu is open */
+        .blur-background {
+            filter: blur(8px);
+            pointer-events: none;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+            background-color: lightblue;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: skyblue;
+            border-radius: 10px;
+        }
+        h2 {
+            text-align: center;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .upload-section {
+            margin-bottom: 20px;
+        }
+        .view-btn {
+            margin-left: 10px;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .fetched-documents {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: lightgray;
+            border-radius: 10px;
+        }
+        .fetched-documents h3 {
+            text-align: center;
+        }
+        /* No-documents image */
+        #no-documents {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #no-documents img {
+            max-width: 150px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Preloader Spinner -->
+<div id="preloader">
+    <img src="Preloader/sfcss.gif" alt="Loading...">
+</div>
+    
+       <!-- Header -->
+    <div class="header blur-content">
+        <div class="header-logo">
+            <img src="main1.png" alt="Logo">
+            <span class="header-title">SFCSS Admissions Portal</span>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <i class='bx bx-menu'></i>
+        </div>
+    </div>
+
+    <!-- Menu -->
+    <div class="menu" id="menu">
+        <!-- Close button inside menu -->
+        <span class="close" id="close-menu"><i class='bx bx-x'></i></span>
+        <img src="main1.png" alt="Cover Image">
+        <a href="profile.html">My Account</a>
+        <a href="documents.html">My Documents</a>
+        <a href="CAS.html">My Admission</a>
+        <a href="#">Admission Letter</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content blur-content" id="greeting">
+        <!-- Greeting message will be inserted here by JavaScript -->
+    </div>
+
+<!-- Fetched documents section and main container -->
+<div id="fetched-documents" class="fetched-documents blur-content">
+    <h3>Your Uploaded Documents</h3>
+    <div id="no-documents">
+        <img src="src/148.svg" alt="No documents available">
+        <p>No documents uploaded yet.</p>
+    </div>
+    <ul id="documents-list"></ul>
+</div>
+
+<div class="container blur-content">
+    <h2>Upload Documents</h2>
+
+    <div class="upload-section">
+        <label for="nin">NIN (PDF/Image):</label>
+        <input type="file" id="nin" accept=".pdf, image/*">
+        <button id="upload-nin">Upload NIN</button>
+    </div>
+
+    <div class="upload-section">
+        <label for="birthCert">Birth Certificate (PDF/Image):</label>
+        <input type="file" id="birthCert" accept=".pdf, image/*">
+        <button id="upload-birthCert">Upload Birth Certificate</button>
+    </div>
+</div>
+
+<footer class="footer blur-content">
+    Saint Francis Catholic Secondary School Admissions
+</footer>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+<script>
+    // Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD9aOH52xSCvzs0Y7XQNg6NytskjlpJbj0",
+  authDomain: "sfcss-779ca.firebaseapp.com",
+  projectId: "sfcss-779ca",
+  storageBucket: "sfcss-779ca.appspot.com",
+  messagingSenderId: "431914674646",
+  appId: "1:431914674646:web:7b1aa8b8191878f2589c77",
+  measurementId: "G-V1L6000T00"
+};
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+
+    const docs = {
+        nin: 'NIN',
+        birthCert: 'Birth Certificate'
+    };
+
+    // Show spinner during loading
+    function showPreloader() {
+        document.getElementById('preloader').style.display = 'flex';
+    }
+
+    // Hide spinner after loading
+    function hidePreloader() {
+        document.getElementById('preloader').style.display = 'none';
+    }
+    
+           
+    // Check if user is authenticated
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            showPreloader();
+         
+            // User is signed in, fetch their documents
+            fetchDocuments(user.uid).finally(() => hidePreloader());
+            // Display greeting based on the time of day
+                        const now = new Date();
+                        const hours = now.getHours();
+                        let greeting;
+
+                        if (hours < 12) {
+                            greeting = 'Good morning';
+                        } else if (hours < 18) {
+                            greeting = 'Good afternoon';
+                        } else {
+                            greeting = 'Good evening';
+                        }
+
+                        document.getElementById('greeting').innerHTML = `${greeting}! Welcome to the Document upload page`;
+
+        } else {
+            // Redirect to login if not authenticated
+            window.location.href = 'login.html';
+        }
+    });
+    
+        // Toggle hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        const closeMenu = document.getElementById('close-menu');
+        const blurContent = document.querySelectorAll('.blur-content');
+
+        function toggleMenu() {
+            menu.classList.toggle('open');
+            blurContent.forEach(content => {
+                if (menu.classList.contains('open')) {
+                    content.classList.add('blur-background');
+                } else {
+                    content.classList.remove('blur-background');
+                }
+            });
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        closeMenu.addEventListener('click', toggleMenu);
+
+
+    // Upload file to Firebase Storage and Firestore
+    function uploadDocument(inputId, docType) {
+        const fileInput = document.getElementById(inputId);
+        const file = fileInput.files[0];
+        const user = auth.currentUser;
+
+        if (file) {
+            if (file.size <= 5 * 1024 * 1024) { // Check file size (5MB)
+                showPreloader();
+                const docRef = storageRef.child(`documents/${user.uid}/${docType}`);
+
+                // Remove no-documents image when uploading starts
+                removeNoDocumentsImage();
+
+                // Upload the file to Firebase
+                docRef.put(file).then(() => {
+                    docRef.getDownloadURL().then(url => {
+                        // Save document details in Firestore
+                        db.collection('users').doc(user.uid).collection('documents').doc(docType)
+                            .set({
+                                url: url,
+                                type: docType,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            }).then(() => {
+                                alert(`${docType} uploaded successfully!`);
+                                fetchDocuments(user.uid);
+                            }).finally(() => hidePreloader());
+                    });
+                }).catch(error => {
+                    alert('Error uploading ' + docType + ': ' + error.message);
+                    hidePreloader();
+                });
+            } else {
+                alert('File size should not exceed 5MB.');
+            }
+        } else {
+            alert('Please select a file.');
+        }
+    }
+
+    // Remove the no-documents image
+    function removeNoDocumentsImage() {
+        const noDocumentsDiv = document.getElementById('no-documents');
+        if (noDocumentsDiv) {
+            noDocumentsDiv.style.display = 'none';
+        }
+    }
+
+    // Fetch and display uploaded documents
+    function fetchDocuments(userId) {
+        const documentsList = document.getElementById('documents-list');
+        documentsList.innerHTML = '';  // Clear previous entries
+
+        return db.collection('users').doc(userId).collection('documents').orderBy('timestamp', 'desc')
+            .get().then(querySnapshot => {
+                if (querySnapshot.empty) {
+                    // If no documents are available, show the no-documents image
+                    document.getElementById('no-documents').style.display = 'block';
+                } else {
+                    querySnapshot.forEach(doc => {
+                        const docData = doc.data();
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `${docData.type}: <a href="${docData.url}" target="_blank">View Document</a>`;
+                        documentsList.appendChild(listItem);
+                    });
+                    // Hide the no-documents image if documents are found
+                    removeNoDocumentsImage();
+                }
+            }).catch(error => {
+                console.error('Error fetching documents:', error);
+            });
+    }
+
+    // Event listeners for upload buttons
+    document.getElementById('upload-nin').addEventListener('click', () => uploadDocument('nin', docs.nin));
+    document.getElementById('upload-birthCert').addEventListener('click', () => uploadDocument('birthCert', docs.birthCert));
+
+</script>
+
+</body>
+</html>
+
+

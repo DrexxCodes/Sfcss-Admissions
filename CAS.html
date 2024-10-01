@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAS - Admission Status</title>
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: lightblue;
+        }
+
+        .btn {
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Preloader Spinner */
+        #preloader {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Light background with opacity */
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preloader img {
+            width: 100px;
+            height: 100px;
+        }
+    
+          /* Sticky header */
+        .header {
+            background-color: skyblue;
+            color: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .hamburger {
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Menu Styles */
+        .menu {
+            position: fixed;
+            right: -100%;
+            top: 0;
+            width: 50%;
+            height: 100vh;
+            background-color: white;
+            border-left: 1px solid #ccc;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 30px;
+        }
+
+        .menu.open {
+            right: 0;
+        }
+
+        .menu img {
+            width: 80%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+            border-bottom: 1px solid #ccc;
+            width: 90%;
+            text-align: center;
+        }
+
+        .menu a:last-child {
+            border-bottom: none;
+        }
+
+        .menu a:hover {
+            background-color: skyblue;
+            color: white;
+        }
+
+        .menu .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Blur background when menu is open */
+        .blur-background {
+            filter: blur(8px);
+            pointer-events: none;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+            background-color: lightblue;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        /* Greeting Div */
+        #greeting {
+            padding: 15px;
+            background-color: skyblue;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Info Message Div */
+        #info-message {
+            padding: 15px;
+            background-color: lightblue;
+            margin-bottom: 20px;
+        }
+
+        /* NIN missing message */
+        #nin-missing-message {
+            padding: 15px;
+            background-color: grey;
+            margin-top: 20px;
+        }
+
+        /* Admission Status Div */
+        #admission-status-div {
+            padding: 15px;
+            background-color: lightblue;
+            margin-top: 20px;
+        }
+
+        /* Get Admission Letter Button */
+        .green-btn {
+            padding: 10px;
+            margin-top: 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .green-btn:hover {
+            background-color: #006400;
+        }
+    
+    footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <img src="Preloader/sfcss.gif" alt="Loading...">
+    </div>
+
+    <!-- Header and Hamburger (imported from other pages) -->
+    <header>
+           <!-- Header -->
+    <div class="header blur-content">
+        <div class="header-logo">
+            <img src="main1.png" alt="Logo">
+            <span class="header-title">SFCSS Admissions Portal</span>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <i class='bx bx-menu'></i>
+        </div>
+    </div>
+
+    <!-- Menu -->
+    <div class="menu" id="menu">
+        <!-- Close button inside menu -->
+        <span class="close" id="close-menu"><i class='bx bx-x'></i></span>
+        <img src="main1.png" alt="Cover Image">
+        <a href="profile.html">My Account</a>
+        <a href="documents.html">My Documents</a>
+        <a href="CAS.html">My Admission</a>
+        <a href="#">Admission Letter</a>
+    </div>
+    </header>
+    
+    
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Greeting -->
+        <div id="greeting"></div>
+
+        <!-- Informational Message -->
+        <div id="info-message">
+            <p>Click the button below to check your admission status.</p>
+            <button id="check-status-btn" class="btn">Check Admission Status</button>
+        </div>
+
+        <!-- NIN Missing Message -->
+        <div id="nin-missing-message" class="hidden">
+            <p>To be eligible for admission to the school, your NIN must be uploaded.</p>
+            <a href="documents.html" class="btn">Upload NIN</a>
+        </div>
+
+        <!-- Admission Status Info -->
+        <div id="admission-status-div" class="hidden">
+            <p><strong>Exam ID:</strong> <span id="exam-id"></span></p>
+            <p><strong>Admission State:</strong> <span id="admission-state"></span></p>
+            <p><strong>Admission Status:</strong> <span id="admission-status"></span></p>
+            <button id="get-admission-letter-btn" class="green-btn hidden">Get Admission Letter</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="blur-content">
+        <p>Saint Francis Catholic Secondary School Admissions &copy; <span id="current-year"></span></p>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9aOH52xSCvzs0Y7XQNg6NytskjlpJbj0",
+            authDomain: "sfcss-779ca.web.app",
+            projectId: "sfcss-779ca",
+            storageBucket: "sfcss-779ca.appspot.com",
+            messagingSenderId: "431914674646",
+            appId: "1:431914674646:web:7b1aa8b8191878f2589c77",
+            measurementId: "G-V1L6000T00"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Preloader
+        const preloader = document.getElementById('preloader');
+
+     // Show preloader
+        function showPreloader() {
+            document.getElementById('preloader').style.display = 'flex';
+        }
+
+        // Hide preloader
+        function hidePreloader() {
+            document.getElementById('preloader').style.display = 'none';
+        }
+
+        // Hide preloader when the page loads
+        window.addEventListener('load', () => {
+            hidePreloader();
+        });
+    
+                // Toggle hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        const closeMenu = document.getElementById('close-menu');
+        const blurContent = document.querySelectorAll('.blur-content');
+
+        function toggleMenu() {
+            menu.classList.toggle('open');
+            blurContent.forEach(content => {
+                if (menu.classList.contains('open')) {
+                    content.classList.add('blur-background');
+                } else {
+                    content.classList.remove('blur-background');
+                }
+            });
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        closeMenu.addEventListener('click', toggleMenu);
+
+
+        // Show greeting message based on time of day
+        function showGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting = 'Welcome to the Central Admission System (CAS)!';
+
+            if (hour < 12) {
+                greeting = 'Good Morning! ' + greeting;
+            } else if (hour < 18) {
+                greeting = 'Good Afternoon! ' + greeting;
+            } else {
+                greeting = 'Good Evening! ' + greeting;
+            }
+
+            document.getElementById('greeting').textContent = greeting;
+        }
+
+        // Check Admission Status
+        document.getElementById('check-status-btn').addEventListener('click', () => {
+            // Show preloader when checking status
+            showPreloader();
+
+            // Get the current user
+            const user = auth.currentUser;
+
+            if (user) {
+                const uid = user.uid;
+
+                // Check if NIN is uploaded in users > uid > documents > NIN
+                db.collection('users').doc(uid).collection('documents').doc('NIN').get().then(doc => {
+                    if (doc.exists) {
+                        // NIN is present
+                        const studentRef = db.collection('students').doc(uid);
+                        studentRef.get().then(studentDoc => {
+                            if (studentDoc.exists) {
+                                const studentData = studentDoc.data();
+                                const examId = studentData.examID || 'N/A'; // Assuming examID is stored in the student document
+                                const mathScore = studentData.math || 0;
+                                const englishScore = studentData.english || 0;
+                                const aggregate = studentData.aggregate || 0;
+                                const interviewScore = studentData.interview || 0;
+
+                                let admissionStatus = 'NOT ADMITTED YET';
+                                if (aggregate >= 50) {
+                                    admissionStatus = 'ELIGIBLE FOR INTERVIEW';
+
+                                    if (interviewScore > 50) {
+                                        admissionStatus = 'ADMITTED';
+                                        document.getElementById('get-admission-letter-btn').classList.remove('hidden');
+                                    } else if (interviewScore < 50 && interviewScore !== 0) {
+                                        admissionStatus = 'NOT ADMITTED';
+                                    }
+                                }
+
+                                // Save admission status to Firestore
+                                studentRef.update({ admissionStatus });
+
+                                // Display the admission status info
+                                document.getElementById('exam-id').textContent = examId;
+                                document.getElementById('admission-state').textContent = studentData.state || 'Unknown';
+                                document.getElementById('admission-status').textContent = admissionStatus;
+                                document.getElementById('admission-status-div').classList.remove('hidden');
+                            } else {
+                                alert('No student record found.');
+                            }
+                        }).catch(error => {
+                            console.error('Error fetching student data:', error);
+                            alert('An error occurred while fetching student data.');
+                        });
+                    } else {
+                        // NIN is missing
+                        document.getElementById('nin-missing-message').classList.remove('hidden');
+                    }
+                }).catch(error => {
+                    console.error('Error checking NIN upload status:', error);
+                    alert('An error occurred while checking NIN upload status.');
+                }).finally(() => {
+                    hidePreloader();
+                });
+            } else {
+                // Redirect to login if user is not authenticated
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Initialize greeting and hide preloader after DOM loads
+        document.addEventListener('DOMContentLoaded', () => {
+            showGreeting();
+            hidePreloader();
+        });
+            // Set current year in the footer
+        const currentYear = new Date().getFullYear();
+        document.getElementById('current-year').textContent = currentYear;
+
+    </script>
+</body>
+</html>

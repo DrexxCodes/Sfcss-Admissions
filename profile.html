@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - SFCSS Admissions Portal</title>
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            overflow-x: hidden;
+        }
+
+        /* Sticky header */
+        .header {
+            background-color: skyblue;
+            color: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+       .menu {
+            position: fixed;
+            right: -100%;
+            top: 0;
+            width: 50%;
+            height: 100vh;
+            background-color: white;
+            border-left: 1px solid #ccc;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 30px;
+        }
+
+        .menu.open {
+            right: 0;
+        }
+
+        .menu img {
+            width: 80%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+            border-bottom: 1px solid #ccc;
+            width: 90%;
+            text-align: center;
+        }
+
+        .menu a:last-child {
+            border-bottom: none;
+        }
+
+        .menu a:hover {
+            background-color: skyblue;
+            color: white;
+        }
+
+        .menu .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Blur background when menu is open */
+        .blur-background {
+            filter: blur(8px);
+            pointer-events: none;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+            background-color: lightblue;
+            margin: 20px;
+            border-radius: 10px;
+        }
+        .hamburger {
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Content container */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: lightblue;
+            align-items: center;
+        }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .uid-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .uid {
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Preloader Spinner CSS */
+        #preloader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Light background with opacity */
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preloader img {
+            width: 100px;
+            height: 100px;
+        }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .menu {
+                width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader Spinner -->
+    <div id="preloader">
+        <img src="Preloader/sfcss.gif" alt="Loading...">
+    </div>
+
+    <!-- Header -->
+    <div class="header blur-content">
+        <div class="header-logo">
+            <img src="main1.png" alt="Logo">
+            <span class="header-title">SFCSS Admissions Portal</span>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <i class='bx bx-menu'></i>
+        </div>
+    </div>
+    
+        <div class="menu" id="menu">
+        <!-- Close button inside menu -->
+        <span class="close" id="close-menu"><i class='bx bx-x'></i></span>
+        <img src="main1.png" alt="Cover Image">
+        <a href="profile.html">My Account</a>
+        <a href="documents.html">My Documents</a>
+        <a href="CAS.html">My Admission</a>
+        <a href="#">Admission Letter</a>
+    </div>
+
+
+    <!-- Profile Container -->
+    <div class="container blur-content">
+        <h2>Profile</h2>
+        <form id="profile-form">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Name" readonly>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Email" readonly>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Phone Number" readonly>
+
+            <label for="class">Class</label>
+            <input type="text" id="class" placeholder="Class" readonly>
+
+            <label for="exam-id">Exam ID</label>
+            <input type="text" id="exam-id" placeholder="Exam ID" readonly>
+        </form>
+
+        <!-- User ID Display -->
+        <div class="uid-container blur-content">
+            <p>User ID (UID): <span class="uid" id="uid"></span></p>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="logout-btn blur-content" id="logout-btn">Logout</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="blur-content">
+        <p>Saint Francis Catholic Secondary School Admissions &copy; <span id="current-year"></span></p>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9aOH52xSCvzs0Y7XQNg6NytskjlpJbj0",
+            authDomain: "sfcss-779ca.web.app",
+            projectId: "sfcss-779ca",
+            storageBucket: "sfcss-779ca.appspot.com",
+            messagingSenderId: "431914674646",
+            appId: "1:431914674646:web:7b1aa8b8191878f2589c77",
+            measurementId: "G-V1L6000T00"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Show preloader
+        function showPreloader() {
+            document.getElementById('preloader').style.display = 'flex';
+        }
+
+        // Hide preloader
+        function hidePreloader() {
+            document.getElementById('preloader').style.display = 'none';
+        }
+            // Toggle hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        const closeMenu = document.getElementById('close-menu');
+        const blurContent = document.querySelectorAll('.blur-content');
+
+        function toggleMenu() {
+            menu.classList.toggle('open');
+            blurContent.forEach(content => {
+                if (menu.classList.contains('open')) {
+                    content.classList.add('blur-background');
+                } else {
+                    content.classList.remove('blur-background');
+                }
+            });
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        closeMenu.addEventListener('click', toggleMenu);
+
+
+        // Populate profile data
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                const uid = user.uid;
+                document.getElementById('uid').textContent = uid;
+
+                // Show preloader while fetching data
+                showPreloader();
+
+                // Fetch user profile from Firestore
+                db.collection('students').doc(uid).get().then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('name').value = data.name;
+                        document.getElementById('email').value = data.email;
+                        document.getElementById('phone').value = data.phone;
+                        document.getElementById('class').value = data.class;
+                        document.getElementById('exam-id').value = data.examID;
+                    } else {
+                        console.log('No such document!');
+                    }
+                }).catch(error => {
+                    console.error('Error getting document:', error);
+                }).finally(() => {
+                    // Hide preloader after fetching data
+                    hidePreloader();
+                });
+            } else {
+                // Redirect to login if user is not authenticated
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                window.location.href = 'login.html';
+            }).catch(error => {
+                console.error('Error logging out:', error);
+            });
+        });
+
+        // Set current year in the footer
+        const currentYear = new Date().getFullYear();
+        document.getElementById('current-year').textContent = currentYear;
+    </script>
+
+</body>
+</html>

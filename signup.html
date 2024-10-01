@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            background-color: white;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: skyblue;
+        }
+        .container h2 {
+            text-align: center;
+        }
+        .logo-container { 
+            display: flex;
+            justify-content: center; 
+            margin-bottom: 20px;
+        } 
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 70%; 
+            object-fit: cover;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .social-login-btn {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .google-btn {
+            background-color: #db4437;
+            color: white;
+        }
+        .apple-btn {
+            background-color: #000000;
+            color: white;
+        }
+        .bx {
+            margin-right: 10px;
+        }
+
+        /* Preloader Styles */
+        #preloader {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preloader img {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Preloader -->
+    <div id="preloader">
+        <img src="Preloader/sfcss.gif" alt="Loading...">
+    </div>
+
+    <div class="container">
+        <!-- Logo Container -->
+        <div class="logo-container">
+            <img src="main1.png" alt="Logo" class="logo">
+        </div>
+
+        <h2>Sign Up</h2>
+        <div id="success-message" class="success-message"></div>
+        <form id="signup-form">
+            <input type="text" id="name" placeholder="Candidate's Name" required>
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <select id="class" required>
+                <option value="" disabled selected>Select Class</option>
+                <option value="JSS1">JSS1</option>
+                <option value="JSS2">JSS2</option>
+                <option value="SS1">SS1</option>
+            </select>
+            <input type="text" id="device" placeholder="Device Info" readonly>
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <button class="social-login-btn google-btn" id="google-signup"><i class='bx bxl-google'></i> Sign Up with Google</button>
+        <button class="social-login-btn apple-btn" id="apple-signup"><i class='bx bxl-apple'></i> Sign Up with Apple</button>
+
+        <p>Already have an account? <a href="login.html">Login</a></p>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <!-- Device Detector.js -->
+    <script src="https://cdn.jsdelivr.net/npm/device-detector-js@3.0.3/dist/utils/model.min.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9aOH52xSCvzs0Y7XQNg6NytskjlpJbj0",
+            authDomain: "sfcss-779ca.web.app",
+            projectId: "sfcss-779ca",
+            storageBucket: "sfcss-779ca.appspot.com",
+            messagingSenderId: "431914674646",
+            appId: "1:431914674646:web:7b1aa8b8191878f2589c77",
+            measurementId: "G-V1L6000T00"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Show preloader
+        function showPreloader() {
+            document.getElementById('preloader').style.display = 'flex';
+        }
+
+        // Hide preloader
+        function hidePreloader() {
+            document.getElementById('preloader').style.display = 'none';
+        }
+
+        // Function to generate unique exam ID
+        function generateExamID() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = 'SFCSS/';
+            for (let i = 0; i < 5; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        // Handle sign up
+        document.getElementById('signup-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            showPreloader(); // Show preloader when the sign-up starts
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const selectedClass = document.getElementById('class').value;
+
+            auth.createUserWithEmailAndPassword(email, 'YOUR_DEFAULT_PASSWORD') // Set a default password
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    const examID = generateExamID();
+
+                    // Save user data to Firestore
+                    return db.collection('students').doc(user.uid).set({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        class: selectedClass,
+                        examID: examID,
+                        admitted: false,       // Add admitted field with a value of false
+                        english: 0,            // Add English field with a value of 0
+                        math: 0,               // Add Math field
+                        Interview: 0,
+                        total: 0
+                    });
+                })
+                .then(() => {
+                    const successMessage = document.getElementById('success-message');
+                    successMessage.innerHTML = 'Sign up successful! Please verify your email.';
+                    
+                    // Send email verification
+                    return auth.currentUser.sendEmailVerification();
+                })
+                .then(() => {
+                    const successMessage = document.getElementById('success-message');
+                    successMessage.innerHTML += ' Verification email has been sent.';
+
+                    // Remove the success message after 8 seconds
+                    setTimeout(() => {
+                        successMessage.innerHTML = '';
+                    }, 8000);
+                })
+                .catch((error) => {
+                    alert(error.message);
+                })
+                .finally(() => {
+                    hidePreloader(); // Hide preloader when the process is complete
+                });
+        });
+
+        // Google sign-up
+        document.getElementById('google-signup').addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    console.log('Google sign-up successful:', result.user);
+                })
+                .catch((error) => {
+                    console.error('Google sign-up error:', error);
+                });
+        });
+
+        // Apple sign-up
+        document.getElementById('apple-signup').addEventListener('click', () => {
+            const provider = new firebase.auth.OAuthProvider('apple.com');
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    console.log('Apple sign-up successful:', result.user);
+                })
+                .catch((error) => {
+                    console.error('Apple sign-up error:', error);
+                });
+        });
+    </script>
+
+</body>
+</html>

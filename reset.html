@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset</title>
+    <style>
+        body {
+            background-color: white;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: skyblue;
+        }
+        .container h2 {
+            text-align: center;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 80%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Reset Password</h2>
+    <div id="message" class="message"></div>
+    <form id="reset-form">
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <button type="submit">Send Password Reset Email</button>
+    </form>
+</div>
+
+<footer class="footer">
+    Saint Francis Catholic Secondary School Admissions
+</footer>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+<script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyD9aOH52xSCvzs0Y7XQNg6NytskjlpJbj0",
+        authDomain: "sfcss-779ca.firebaseapp.com",
+        projectId: "sfcss-779ca",
+        storageBucket: "sfcss-779ca.appspot.com",
+        messagingSenderId: "431914674646",
+        appId: "1:431914674646:web:7b1aa8b8191878f2589c77",
+        measurementId: "G-V1L6000T00"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Handle password reset
+    document.getElementById('reset-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const messageDiv = document.getElementById('message');
+
+        auth.sendPasswordResetEmail(email)
+            .then(() => {
+                messageDiv.innerHTML = 'Password reset email sent successfully!';
+                messageDiv.className = 'message success';
+            })
+            .catch((error) => {
+                messageDiv.innerHTML = error.message;
+                messageDiv.className = 'message error';
+            });
+    });
+</script>
+
+</body>
+</html>
