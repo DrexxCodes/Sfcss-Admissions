@@ -34,11 +34,21 @@
             object-fit: cover;
         }
         input, select {
-            width: 100%;
+            width: 90%;
             padding: 10px;
             margin: 5px 0 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+        }
+        .input-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
         }
         button {
             width: 100%;
@@ -54,6 +64,11 @@
         }
         .success-message {
             color: green;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .error-message {
+            color: red;
             font-weight: bold;
             margin-bottom: 15px;
         }
@@ -115,10 +130,19 @@
         </div>
 
         <h2>Sign Up</h2>
+        <div id="error-message" class="error-message"></div>
         <div id="success-message" class="success-message"></div>
         <form id="signup-form">
             <input type="text" id="name" placeholder="Candidate's Name" required>
             <input type="email" id="email" placeholder="Email Address" required>
+            <div class="input-container">
+                <input type="password" id="password" placeholder="Password" required>
+                <i class='bx bx-show toggle-password' id="togglePassword"></i>
+            </div>
+            <div class="input-container">
+                <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+                <i class='bx bx-show toggle-password' id="toggleConfirmPassword"></i>
+            </div>
             <input type="tel" id="phone" placeholder="Phone Number" required>
             <select id="class" required>
                 <option value="" disabled selected>Select Class</option>
@@ -185,14 +209,26 @@
         document.getElementById('signup-form').addEventListener('submit', (e) => {
             e.preventDefault();
 
-            showPreloader(); // Show preloader when the sign-up starts
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+            errorMessage.innerHTML = '';
+            successMessage.innerHTML = '';
 
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
             const phone = document.getElementById('phone').value;
             const selectedClass = document.getElementById('class').value;
 
-            auth.createUserWithEmailAndPassword(email, 'YOUR_DEFAULT_PASSWORD') // Set a default password
+            if (password !== confirmPassword) {
+                errorMessage.innerHTML = 'Passwords do not match!';
+                return;
+            }
+
+            showPreloader(); // Show preloader when the sign-up starts
+
+            auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
                     const examID = generateExamID();
@@ -204,59 +240,115 @@
                         phone: phone,
                         class: selectedClass,
                         examID: examID,
-                        admitted: false,       // Add admitted field with a value of false
-                        english: 0,            // Add English field with a value of 0
-                        math: 0,               // Add Math field
+                        admitted: false,
+                        english: 0,
+                        math: 0,
                         Interview: 0,
                         total: 0
                     });
                 })
                 .then(() => {
-                    const successMessage = document.getElementById('success-message');
                     successMessage.innerHTML = 'Sign up successful! Please verify your email.';
-                    
-                    // Send email verification
                     return auth.currentUser.sendEmailVerification();
                 })
                 .then(() => {
-                    const successMessage = document.getElementById('success-message');
                     successMessage.innerHTML += ' Verification email has been sent.';
-
-                    // Remove the success message after 8 seconds
                     setTimeout(() => {
                         successMessage.innerHTML = '';
                     }, 8000);
                 })
                 .catch((error) => {
-                    alert(error.message);
+                    errorMessage.innerHTML = error.message;
                 })
                 .finally(() => {
-                    hidePreloader(); // Hide preloader when the process is complete
+                    hidePreloader();
                 });
         });
 
         // Google sign-up
         document.getElementById('google-signup').addEventListener('click', () => {
             const provider = new firebase.auth.GoogleAuthProvider();
+            showPreloader();
+
             auth.signInWithPopup(provider)
                 .then((result) => {
-                    console.log('Google sign-up successful:', result.user);
+                    const user = result.user;
+
+                    // Save user info with Google account name
+                    return db.collection('students').doc(user.uid).set({
+                        name: user.displayName,
+                        email: user.email,
+                        phone: user.phoneNumber || '',
+                        class: '',
+                        examID: generateExamID(),
+                        admitted: false,
+                        english: 0,
+                        math: 0,
+                        Interview: 0,
+                        total: 0
+                    });
+                })
+                .then(() => {
+                    hidePreloader();
+                    window.location.href = 'index.html'; // Redirect to index after success
                 })
                 .catch((error) => {
-                    console.error('Google sign-up error:', error);
+                    hidePreloader();
+                    alert(error.message);
                 });
         });
 
         // Apple sign-up
         document.getElementById('apple-signup').addEventListener('click', () => {
             const provider = new firebase.auth.OAuthProvider('apple.com');
+            showPreloader();
+
             auth.signInWithPopup(provider)
                 .then((result) => {
-                    console.log('Apple sign-up successful:', result.user);
+                    const user = result.user;
+
+                    // Save user info with Apple account name
+                    return db.collection('students').doc(user.uid).set({
+                        name: user.displayName || 'Apple User',
+                        email: user.email,
+                        phone: user.phoneNumber || '',
+                        class: '',
+                        examID: generateExamID(),
+                        admitted: false,
+                        english: 0,
+                        math: 0,
+                        Interview: 0,
+                        total: 0
+                    });
+                })
+                .then(() => {
+                    hidePreloader();
+                    window.location.href = 'index.html'; // Redirect to index after success
                 })
                 .catch((error) => {
-                    console.error('Apple sign-up error:', error);
+                    hidePreloader();
+                    alert(error.message);
                 });
+        });
+
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+        togglePassword.addEventListener('click', () => {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            togglePassword.classList.toggle('bx-show');
+            togglePassword.classList.toggle('bx-hide');
+        });
+
+        // Toggle confirm password visibility
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPasswordField = document.getElementById('confirm-password');
+        toggleConfirmPassword.addEventListener('click', () => {
+            const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordField.setAttribute('type', type);
+            toggleConfirmPassword.classList.toggle('bx-show');
+            toggleConfirmPassword.classList.toggle('bx-hide');
         });
     </script>
 

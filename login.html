@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - SFCSS Admissions Portal</title>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
     <style>
         body {
@@ -13,11 +13,13 @@
         }
         .container {
             max-width: 400px;
-            margin: auto;
+            margin: 50px auto;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: skyblue;
+            position: relative;
+            overflow: hidden;
         }
         .container h2 {
             text-align: center;
@@ -33,12 +35,26 @@
             border-radius: 70%; 
             object-fit: cover;
         }
+        .input-container {
+            position: relative;
+            width: 100%;
+        }
         input {
-            width: 90%;
-            padding: 10px;
+            width: 100%;
+            padding: 10px 40px 10px 10px;
             margin: 5px 0 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #555;
+            font-size: 20px;
         }
         button {
             width: 100%;
@@ -48,6 +64,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
         button:hover {
             background-color: #0056b3;
@@ -74,6 +91,7 @@
         }
         .bx {
             margin-right: 10px;
+            font-size: 20px;
         }
         .footer {
             text-align: center;
@@ -92,112 +110,266 @@
         a:hover {
             text-decoration: underline;
         }
+
+        /* Error message styling */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Success message styling */
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Preloader Styles */
+        #preloader {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preloader img {
+            width: 100px;
+            height: 100px;
+        }
+
+        /* Animation for Password Reveal */
+        @keyframes reveal-animation {
+            0% { content: '*'; }
+            10% { content: 'A'; }
+            20% { content: '1'; }
+            30% { content: '@'; }
+            40% { content: 'Z'; }
+            50% { content: '9'; }
+            60% { content: '#'; }
+            70% { content: 'M'; }
+            80% { content: '5'; }
+            90% { content: '$'; }
+            100% { content: attr(data-char); }
+        }
+
+        .animated-char {
+            display: inline-block;
+            animation: reveal-animation 0.5s forwards;
+        }
     </style>
 </head>
 <body>
     
-<div class="container">
-    <!-- Logo Container -->
-    <div class="logo-container">
-        <img src="main1.png" alt="Logo" class="logo">
+    <!-- Preloader -->
+    <div id="preloader">
+        <img src="Preloader/sfcss.gif" alt="Loading...">
     </div>
 
-    <h2>Login</h2>
-    <div id="success-message" class="success-message"></div>
-    <form id="login-form">
-        <input type="text" id="login-id" placeholder="Email or Exam ID" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
+    <div class="container">
+        <!-- Logo Container -->
+        <div class="logo-container">
+            <img src="main1.png" alt="Logo" class="logo">
+        </div>
 
-    <button class="social-login-btn google-btn" id="google-login"><i class='bx bxl-google'></i> Login with Google</button>
-    <button class="social-login-btn apple-btn" id="apple-login"><i class='bx bxl-apple'></i> Login with Apple</button>
+        <h2>Login</h2>
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+        <form id="login-form">
+            <div class="input-container">
+                <input type="text" id="login-id" placeholder="Email or Exam ID" required>
+            </div>
+            <div class="input-container">
+                <input type="password" id="password" placeholder="Password" required>
+                <i class='bx bx-hide toggle-password' id="toggle-password"></i>
+            </div>
+            <button type="submit">Login</button>
+        </form>
 
-    <p><a href="reset.html">Forgotten password?</a></p>
-    <p>Don't have an account? <a href="signup.html">Sign up</a></p>
-</div>
+        <button class="social-login-btn google-btn" id="google-login"><i class='bx bxl-google'></i> Login with Google</button>
+        <button class="social-login-btn apple-btn" id="apple-login"><i class='bx bxl-apple'></i> Login with Apple</button>
 
-<footer class="footer">
-    Saint Francis Catholic Secondary School Admissions
-</footer>
+        <p><a href="reset.html">Forgotten password?</a></p>
+        <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+    </div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <footer class="footer">
+        Saint Francis Catholic Secondary School Admissions
+    </footer>
 
-<script>
-    // Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyD9aOH52xSCvzs0Y7XQNg6NytskjlpJbj0",
-        authDomain: "sfcss-779ca.firebaseapp.com",
-        projectId: "sfcss-779ca",
-        storageBucket: "sfcss-779ca.appspot.com",
-        messagingSenderId: "431914674646",
-        appId: "1:431914674646:web:7b1aa8b8191878f2589c77",
-        measurementId: "G-V1L6000T00"
-    };
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9aOH52xSCvzs0Y7XQNg6NytskjlpJbj0",
+            authDomain: "sfcss-779ca.web.app",
+            projectId: "sfcss-779ca",
+            storageBucket: "sfcss-779ca.appspot.com",
+            messagingSenderId: "431914674646",
+            appId: "1:431914674646:web:7b1aa8b8191878f2589c77",
+            measurementId: "G-V1L6000T00"
+        };
 
-    // Handle login
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-        e.preventDefault();
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
-        const loginId = document.getElementById('login-id').value;
-        const password = document.getElementById('password').value;
+        // Show preloader
+        function showPreloader() {
+            document.getElementById('preloader').style.display = 'flex';
+        }
 
-        auth.signInWithEmailAndPassword(loginId, password)
-            .then((userCredential) => {
-                const successMessage = document.getElementById('success-message');
-                successMessage.innerHTML = 'Login successful! Redirecting...';
-                
-                // Redirect to index.html after login
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    });
+        // Hide preloader
+        function hidePreloader() {
+            document.getElementById('preloader').style.display = 'none';
+        }
 
-    // Google login
-    document.getElementById('google-login').addEventListener('click', () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider)
-            .then((result) => {
-                const successMessage = document.getElementById('success-message');
-                successMessage.innerHTML = 'Login successful! Redirecting...';
-                
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    });
+        // Hide preloader when the page loads
+        window.addEventListener('load', () => {
+            hidePreloader();
+        });
 
-    // Apple login
-    document.getElementById('apple-login').addEventListener('click', () => {
-        const provider = new firebase.auth.OAuthProvider('apple.com');
-        auth.signInWithPopup(provider)
-            .then((result) => {
-                const successMessage = document.getElementById('success-message');
-                successMessage.innerHTML = 'Login successful! Redirecting...';
-                
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    });
-</script>
+        // Handle login form submit
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const loginId = document.getElementById('login-id').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+
+            errorMessage.textContent = '';
+            successMessage.textContent = '';
+
+            // Show preloader during authentication
+            showPreloader();
+
+            auth.signInWithEmailAndPassword(loginId, password)
+                .then((userCredential) => {
+                    successMessage.textContent = 'Login successful! Redirecting...';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                })
+                .catch((error) => {
+                    errorMessage.textContent = 'Incorrect email or password. Please try again.';
+                })
+                .finally(() => {
+                    hidePreloader();
+                });
+        });
+
+        // Google login
+        document.getElementById('google-login').addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            // Show preloader during authentication
+            showPreloader();
+
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    // Successful login
+                    document.getElementById('success-message').textContent = 'Login successful! Redirecting...';
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                })
+                .catch((error) => {
+                    document.getElementById('error-message').textContent = 'Google login failed. Please try again.';
+                })
+                .finally(() => {
+                    hidePreloader();
+                });
+        });
+
+        // Apple login
+        document.getElementById('apple-login').addEventListener('click', () => {
+            const provider = new firebase.auth.OAuthProvider('apple.com');
+
+            // Show preloader during authentication
+            showPreloader();
+
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    // Successful login
+                    document.getElementById('success-message').textContent = 'Login successful! Redirecting...';
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                })
+                .catch((error) => {
+                    document.getElementById('error-message').textContent = 'Apple login failed. Please try again.';
+                })
+                .finally(() => {
+                    hidePreloader();
+                });
+        });
+
+        // Toggle password visibility with animation
+        const togglePassword = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', () => {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+
+            // Toggle the eye icon
+            togglePassword.classList.toggle('bx-hide');
+            togglePassword.classList.toggle('bx-show');
+
+            if (isPassword) {
+                // Start animation when revealing password
+                animatePasswordReveal();
+            }
+        });
+
+        function animatePasswordReveal() {
+            const originalPassword = passwordInput.value;
+            const length = originalPassword.length;
+            let currentIndex = 0;
+
+            // Clear the password field
+            passwordInput.value = '';
+
+            function revealNextCharacter() {
+                if (currentIndex < length) {
+                    const randomChar = getRandomChar();
+                    passwordInput.value += randomChar;
+                    
+                    setTimeout(() => {
+                        // Replace the random character with the actual character
+                        const actualChar = originalPassword[currentIndex];
+                        const currentValue = passwordInput.value;
+                        passwordInput.value = currentValue.slice(0, -1) + actualChar;
+                        currentIndex++;
+                        revealNextCharacter();
+                    }, 100); // Adjust the speed of scanning here
+                }
+            }
+
+            revealNextCharacter();
+        }
+
+        function getRandomChar() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+            return chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+    </script>
 
 </body>
 </html>
